@@ -21,20 +21,8 @@ package plus.dragons.createintegratedfarming.common.ranching.roost.chicken;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.RandomSource;
-import net.minecraft.util.valueproviders.IntProvider;
 
-public record ChickenFoodFluid(IntProvider progress, IntProvider cooldown, int amount) implements ChickenFood {
-
+public record ChickenFoodFluid(int amount) {
     public static final Codec<ChickenFoodFluid> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            IntProvider.codec(0, 12000).fieldOf("progress").forGetter(ChickenFoodFluid::progress),
-            IntProvider.NON_NEGATIVE_CODEC.fieldOf("cooldown").forGetter(ChickenFoodFluid::cooldown),
             ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(ChickenFoodFluid::amount)).apply(instance, ChickenFoodFluid::new));
-    public int getProgress(RandomSource random) {
-        return progress.sample(random);
-    }
-
-    public int getCooldown(RandomSource random) {
-        return progress.sample(random);
-    }
 }

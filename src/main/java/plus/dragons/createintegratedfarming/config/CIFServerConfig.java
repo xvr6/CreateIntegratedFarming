@@ -58,6 +58,10 @@ public class CIFServerConfig extends ConfigBase {
             "roostingInventorySlotSize",
             Comments.roostingInventorySlotSize,
             ConfigAnnotations.RequiresRestart.SERVER.asComment());
+    public final ConfigInt roostingCooldown = i(600, 40, 6000,
+            "roostingCooldown",
+            Comments.roostingCooldown,
+            ConfigAnnotations.RequiresRestart.SERVER.asComment());
 
     @Override
     public String getName() {
@@ -101,5 +105,6 @@ public class CIFServerConfig extends ConfigBase {
         };
         static final String roostingInventorySlotCount = "The amount of Inventory Slot that the Chicken Roost has available.";
         static final String roostingInventorySlotSize = "The amount of items per Inventory slot that the Chicken Roost can hold.";
+        static final String roostingCooldown = "The cooldown after a Roost produces before it accepts food again (in ticks); each serving accepted produces immediately.";
     }
 }

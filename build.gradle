@@ -212,7 +212,11 @@ enabledIntegrationSourceSets.each { name ->
 }
 
 repositories {
-    maven { url "https://maven.dragons.plus/releases" } // Ponder, Flywheel
+    // TEMPORARY: maven.dragons.plus TLS cert expired 2026-07-18; revert to https once renewed
+    maven {
+        url "http://maven.dragons.plus/releases"
+        allowInsecureProtocol = true
+    } // Ponder, Flywheel
     maven { url "https://maven.createmod.net" } // Ponder, Flywheel
     maven { url "https://mvn.devos.one/snapshots" } // Registrate
     maven { url "https://maven.blamejared.com" } // JEI

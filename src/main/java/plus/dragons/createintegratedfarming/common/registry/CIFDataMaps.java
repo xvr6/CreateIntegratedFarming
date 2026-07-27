@@ -25,8 +25,6 @@ import com.tterrag.registrate.providers.RegistrateDataMapProvider;
 import java.util.Optional;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.IEventBus;
@@ -61,14 +59,9 @@ public class CIFDataMaps {
 
     public static void generate(RegistrateDataMapProvider provider) {
         provider.builder(CHICKEN_FOOD_ITEMS)
-                .add(ItemTags.CHICKEN_FOOD, new ChickenFoodItem(
-                        ConstantInt.of(2400),
-                        UniformInt.of(400, 800),
-                        Optional.empty()), false);
+                .add(ItemTags.CHICKEN_FOOD, new ChickenFoodItem(Optional.empty()), false);
         provider.builder(CHICKEN_FOOD_FLUIDS)
-                .add(ModIntegration.CREATE_CRAFT_AND_ADDITIONS.asResource("seed_oil"), new ChickenFoodFluid(
-                        ConstantInt.of(2400),
-                        UniformInt.of(400, 800),
-                        100), false, ModIntegration.CREATE_CRAFT_AND_ADDITIONS.condition());
+                .add(ModIntegration.CREATE_CRAFT_AND_ADDITIONS.asResource("seed_oil"),
+                        new ChickenFoodFluid(100), false, ModIntegration.CREATE_CRAFT_AND_ADDITIONS.condition());
     }
 }

@@ -19,19 +19,12 @@
 package plus.dragons.createintegratedfarming.common.ranching.roost.chicken;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
 import plus.dragons.createintegratedfarming.common.ranching.roost.AnimalRoostBlockEntity;
 import plus.dragons.createintegratedfarming.common.registry.CIFDataMaps;
@@ -49,46 +42,24 @@ public class ChickenRoostBlockEntity extends AnimalRoostBlockEntity {
 
     @Override
     public boolean feedItem(ItemStack stack, boolean simulate) {
-        assert level != null;
-        if (feedCooldown > 0 || eggTime <= 0)
+        if (!canFeed())
             return false;
         var food = stack.getItemHolder().getData(CIFDataMaps.CHICKEN_FOOD_ITEMS);
         if (food == null)
             return false;
         if (simulate)
             return true;
-        feed(food);
-        Direction facing = getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-        Vec3 feedPos = Vec3.atBottomCenterOf(worldPosition)
-                .add(facing.getStepX() * .5f, 13 / 16f, facing.getStepZ() * .5f);
-        food.usingConvertsTo().ifPresent(remainer -> Containers.dropItemStack(
-                level, feedPos.x, feedPos.y, feedPos.z, remainer));
-        level.addParticle(
-                new ItemParticleOption(ParticleTypes.ITEM, stack),
-                feedPos.x, feedPos.y, feedPos.z,
-                0, 0, 0);
-        return true;
+        return feed(stack, food.usingConvertsTo().orElse(ItemStack.EMPTY), SoundEvents.CHICKEN_AMBIENT);
     }
 
     public int feedFluid(FluidStack fluid, boolean simulate) {
-        if (feedCooldown > 0 || eggTime <= 0)
+        if (!canFeed())
             return 0;
         var food = fluid.getFluidHolder().getData(CIFDataMaps.CHICKEN_FOOD_FLUIDS);
         if (food == null)
             return 0;
         if (simulate)
             return food.amount();
-        feed(food);
-        return food.amount();
-    }
-
-    public void feed(ChickenFood food) {
-        assert level != null;
-        eggTime = Math.max(0, eggTime - food.getProgress(level.random));
-        feedCooldown = food.getCooldown(level.random);
-        level.playSound(
-                null, worldPosition, SoundEvents.CHICKEN_AMBIENT, SoundSource.BLOCKS,
-                1.0F, (level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F);
-        notifyUpdate();
+        return feed(ItemStack.EMPTY, ItemStack.EMPTY, SoundEvents.CHICKEN_AMBIENT) ? food.amount() : 0;
     }
 }
