@@ -58,7 +58,7 @@ public class CIFServerConfig extends ConfigBase {
             "roostingInventorySlotSize",
             Comments.roostingInventorySlotSize,
             ConfigAnnotations.RequiresRestart.SERVER.asComment());
-    public final ConfigInt roostingCooldown = i(6000, 600, 9600,
+    public final ConfigInt roostingCooldown = i(6000, 20, 9600,
             "roostingCooldown",
             Comments.roostingCooldown,
             ConfigAnnotations.RequiresRestart.SERVER.asComment());
